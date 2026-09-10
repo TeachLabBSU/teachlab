@@ -1,0 +1,36 @@
+name: Code Quality Check
+
+# 1. Триггеры: запускать робота при пуше или создании Pull Request в ветки develop и main
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Скачать код твоего репозитория на этот виртуальный компьютер
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      # Шаг 2: Установить Python 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Шаг 3: Установить линтер Flake8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      # Шаг 4: Запустить проверку кода
+      - name: Run Flake8 linter
+        # Проверяем синтаксические ошибки (E9, F63, F7, F82)
+        # Если найдет хоть одну критическую ошибку — сборка упадет с ошибкой
+        run: |  
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
