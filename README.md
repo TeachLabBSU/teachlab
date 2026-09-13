@@ -46,12 +46,3 @@ docker compose up -d --build
 * **Интерактивная документация (Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)  
 * **Альтернативная документация (ReDoc):** [http://localhost:8000/redoc](http://localhost:8000/redoc)
 * **Проверка здоровья сервиса (Healthcheck):** [http://localhost:8000/health](http://localhost:8000/health)
-
-#### Параметры подключения к базе данных (PostgreSQL):
-Для подключения к базе через программы DBeaver, TablePlus или плагины VS Code:
-* **Хост (Host):** `localhost`
-* **Порт (Port):** `5432`
-* **Имя базы данных (Database):** `teachlab_db`
-* **Пользователь (Username):** `postgres`
-* **Пароль (Password):** указан в файле `.env` *(по умолчанию: `postgrespassword`)*
-* **Строка подключения (Connection URL):** `postgresql://postgres:postgrespassword@localhost:5432/teachlab_db`
