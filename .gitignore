@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 .venv/
+.teach_lab_venv/
 venv/
 *.env
 
