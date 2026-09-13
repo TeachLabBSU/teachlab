@@ -1,47 +1,57 @@
-# teachlab
-**TeachLab** — веб-платформа для комплексной автоматизации работы репетиторов, преподавателей и образовательных центров.
+## 🛠 Стек технологий
 
-## Команда проекта
+* **Backend:** Python 3.11+, FastAPI, Uvicorn, SQLAlchemy 2.0, Pydantic v2
+* **Database:** PostgreSQL 15 (развертывание через Docker Compose)
+* **Frontend:** TypeScript, React (Vite), Tailwind CSS
+* **Инфраструктура & CI/CD:** Docker, GitHub Actions (Flake8 linter)
+* **Управление проектом:** Jira (Scrum), Figma
 
-* **Дикан Данила** — Team Lead, DevOps, Backend-разработчик
-* **Попов Данила** — Backend-разработчик, Frontend-разработчик
-* **Резун Юлия** — Technical Writer, UI/UX дизайнер
-* **Бабаева Полина** — Frontend-разработчик, QA-инженер
+## Структура
 
+```text
+teachlab/
+├── .github/workflows/   # Автоматические проверки кода (CI/CD)
+├── backend/             # Серверная часть (FastAPI)
+│   ├── app/
+│   │   ├── core/        # Конфигурация и настройки приложения
+│   │   ├── models/      # Модели базы данных (SQLAlchemy)
+│   │   ├── schemas/     # Схемы валидации данных (Pydantic)
+│   │   ├── routers/     # Маршруты и эндпоинты API (users.py, classrooms.py)
+│   │   └── main.py      # Точка входа в приложение
+│   ├── requirements.txt # Зависимости Python
+│   └── Dockerfile       # Сборка контейнера бэкенда
+├── frontend/            # Клиентская часть (React SPA)
+├── docker-compose.yml   # Манифест запуска базы данных и сервисов
+└── README.md            # Документация проекта
+```
 
-## Работа с проектом
+## Инструкция по локальному запуску (Quickstart)
 
-Мы используем методологию ветвления **GitFlow**. 
+### Предварительные требования:
+На вашем компьютере должны быть установлены:
+1. **Git**
+2. **Docker Desktop** (для запуска базы данных)
+3. **Python 3.11+** (для разработки бэкенда)
 
-В репозитории есть две основные ветки:
-* **`main`** — стабильная релизная версия проекта. Прямые коммиты в `main` запрещены.
-* **`develop`** — основная рабочая ветка, куда собираются все выполненные задачи спринта.
+### 1. Запуск серверной части (База данных + FastAPI бэкенд):
 
-### Workflow:
+Вся серверная инфраструктура (PostgreSQL + FastAPI) запускается **одной командой** из корня проекта:
 
-1. **Обновите `develop`** перед началом работы:
-   ```bash
-   git checkout develop
-   git pull origin develop
-   ```
+```bash
+docker compose up -d --build
+```
 
-2. **Создайте ветку под свою задачу** (название начинается с `feature/` или номера задачи из Jira):
-   ```bash
-   git checkout -b feature/название-задачи
-   ```
+#### Доступ к API и документации:
+* **Главная страница API:** [http://localhost:8000](http://localhost:8000)
+* **Интерактивная документация (Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)  
+* **Альтернативная документация (ReDoc):** [http://localhost:8000/redoc](http://localhost:8000/redoc)
+* **Проверка здоровья сервиса (Healthcheck):** [http://localhost:8000/health](http://localhost:8000/health)
 
-3. **Работайте и делайте коммиты** в своей ветке:
-   ```bash
-   git add .
-   git commit -m "feat: краткое описание того, что сделано"
-   ```
-
-4. **Отправьте свою ветку на GitHub**:
-   ```bash
-   git push -u origin feature/название-задачи
-   ```
-
-5. **Создайте Pull Request (PR)** на сайте GitHub из вашей ветки в ветку **`develop`**. После проверки тимлидом изменения будут объединены.
-
-> **Полезный материал:**  
-> Чтобы лучше понять логику работы с ветками, обязательно прочитайте руководство: [Atlassian Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
+#### Параметры подключения к базе данных (PostgreSQL):
+Для подключения к базе через программы DBeaver, TablePlus или плагины VS Code:
+* **Хост (Host):** `localhost`
+* **Порт (Port):** `5432`
+* **Имя базы данных (Database):** `teachlab_db`
+* **Пользователь (Username):** `postgres`
+* **Пароль (Password):** указан в файле `.env` *(по умолчанию: `postgrespassword`)*
+* **Строка подключения (Connection URL):** `postgresql://postgres:postgrespassword@localhost:5432/teachlab_db`
