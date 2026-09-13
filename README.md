@@ -43,5 +43,5 @@
 
 5. **Создайте Pull Request (PR)** на сайте GitHub из вашей ветки в ветку **`develop`**. После проверки тимлидом изменения будут объединены.
 
-> *Полезный материал:**  
+> **Полезный материал:**  
 > Чтобы лучше понять логику работы с ветками, обязательно прочитайте руководство: [Atlassian Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
