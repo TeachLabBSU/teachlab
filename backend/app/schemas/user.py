@@ -30,3 +30,9 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserResponse
+
+# Схема обновления
+class UserUpdate(BaseModel):
+    full_name: str
+    email: EmailStr
+    role: Literal["tutor", "student"]
