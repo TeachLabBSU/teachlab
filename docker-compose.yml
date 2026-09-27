@@ -1,4 +1,5 @@
 services:
+  # 1. СУБД PostgreSQL
   postgres:
     image: postgres:15-alpine
     container_name: teachlab_postgres
@@ -12,17 +13,37 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # 2. FastAPI Бэкенд
   backend:
     build: ./backend
     container_name: teachlab_backend
     restart: always
     ports:
       - "8000:8000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespassword}
+      POSTGRES_DB: ${POSTGRES_DB:-teachlab_db}
+      POSTGRES_PORT: 5432
     volumes:
       - ./backend:/app
     depends_on:
       - postgres
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # 3. React Фронтенд
+  frontend:
+    build: ./frontend
+    container_name: teachlab_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

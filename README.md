@@ -1,48 +1,113 @@
-## 🛠 Стек технологий
+# TeachLab
 
-* **Backend:** Python 3.11+, FastAPI, Uvicorn, SQLAlchemy 2.0, Pydantic v2
-* **Database:** PostgreSQL 15 (развертывание через Docker Compose)
-* **Frontend:** TypeScript, React (Vite), Tailwind CSS
-* **Инфраструктура & CI/CD:** Docker, GitHub Actions (Flake8 linter)
+> **TeachLab** — веб-платформа для комплексной автоматизации работы репетиторов, преподавателей и образовательных центров. Сервис объединяет управление виртуальными учебными классами, личный банк задач с поддержкой математических формул LaTeX, генерацию контрольных вариантов и автоматическую проверку решений учеников в режиме реального времени.
+
+Проект разрабатывается в рамках курса «Технологии программирования» (ФПМИ БГУ, 2026).
+
+## Команда проекта (God Bless AI, Группа 4)
+
+* **Дикан Данила** — Team Lead, DevOps-инженер, Backend-разработчик
+* **Попов Данила** — Backend-разработчик, Technical Writer
+* **Резун Юлия** — UI/UX дизайнер, Frontend-разработчик
+* **Бабаева Полина** — Frontend-разработчик, QA-инженер
+
+## Стек используемых технологий
+
+* **Backend:** Python 3.11+, FastAPI (асинхронный REST API), Uvicorn, SQLAlchemy 2.0 (драйвер `psycopg v3`), Pydantic v2
+* **Database:** PostgreSQL 15 (реляционная СУБД с поддержкой `JSONB`)
+* **Frontend:** TypeScript, React 18 (Vite SPA), Tailwind CSS, KaTeX (рендеринг LaTeX-формул)
+* **Безопасность:** Хэширование паролей bcrypt с солью (salt), авторизация на базе JWT-токенов
+* **Инфраструктура:** Docker, Docker Compose (мультиконтейнерная оркестрация)
+* **CI/CD:** GitHub Actions (автоматический линтинг Flake8 при Pull Request)
 * **Управление проектом:** Jira (Scrum), Figma
 
-## Структура
+## Структура монорепозитория
 
 ```text
 teachlab/
-├── .github/workflows/   # Автоматические проверки кода (CI/CD)
-├── backend/             # Серверная часть (FastAPI)
+├── .github/workflows/       # Сценарии авто-проверки кода (CI/CD)
+├── backend/                 # Серверная часть (FastAPI REST API)
 │   ├── app/
-│   │   ├── core/        # Конфигурация и настройки приложения
-│   │   ├── models/      # Модели базы данных (SQLAlchemy)
-│   │   ├── schemas/     # Схемы валидации данных (Pydantic)
-│   │   ├── routers/     # Маршруты и эндпоинты API (users.py, classrooms.py)
-│   │   └── main.py      # Точка входа в приложение
-│   ├── requirements.txt # Зависимости Python
-│   └── Dockerfile       # Сборка контейнера бэкенда
-├── frontend/            # Клиентская часть (React SPA)
-├── docker-compose.yml   # Манифест запуска базы данных и сервисов
-└── README.md            # Документация проекта
+│   │   ├── core/            # Настройки, подключение к БД, безопасность
+│   │   ├── models/          # Таблицы базы данных (SQLAlchemy)
+│   │   ├── schemas/         # Схемы валидации входящих/исходящих данных (Pydantic)
+│   │   ├── routers/         # Эндпоинты API (auth.py, users.py, classrooms.py)
+│   │   └── main.py          # Главная точка входа приложения
+│   ├── docs/                # Архитектурная документация и диаграммы
+│   │   ├── auth.md          # Обоснование JWT и безопасности паролей
+│   │   └── images/          # UML Use Case и ER диаграммы
+│   ├── requirements.txt     # Зависимости Python
+│   ├── Dockerfile           # Сборка контейнера бэкенда
+│   └── README.md            # Спецификация Backend и JSON API
+├── frontend/                # Клиентская часть (React SPA)
+│   ├── src/                 # Исходный код интерфейса и компонентов
+│   ├── Dockerfile           # Сборка контейнера фронтенда
+│   └── README.md            # Документация Frontend и ссылки на Figma
+├── docker-compose.yml       # Единый запуск PostgreSQL, Backend и Frontend
+└── README.md                # Общая документация проекта
 ```
 
-## Инструкция по локальному запуску (Quickstart)
+## Проектная документация и спецификации
 
-### Предварительные требования:
-На вашем компьютере должны быть установлены:
+Для подробного ознакомления с архитектурой перейдите в соответствующие разделы:
+
+* **[Спецификация REST API и схема базы данных](/backend/README.md)** — полное описание JSON-запросов, ролей и ER-модели.
+* **[Документация клиентской части и прототипы](frontend/README.md)** — описание интерфейса, ссылки на макеты в Figma.
+* **[Архитектура безопасности и авторизации](backend/docs/auth.md)** — детализация работы JWT, хэширования и соли (Bcrypt).
+* **[UML Use Case диаграмма](backend/docs/images/use_case.svg)** — сценарии использования системы.
+* **[ER-диаграмма базы данных](/backend/docs/images/er_diagram.svg)** — структура связей таблиц PostgreSQL.
+
+## Запуск всего проекта в Docker
+
+### Предварительные требования
+
 1. **Git**
-2. **Docker Desktop** (для запуска базы данных)
-3. **Python 3.11+** (для разработки бэкенда)
+2. **Docker Desktop** (запущенный в фоновом режиме)
 
-### 1. Запуск серверной части (База данных + FastAPI бэкенд):
+### Запуск системы одной командой
 
-Вся серверная инфраструктура (PostgreSQL + FastAPI) запускается **одной командой** из корня проекта:
+Клонируйте репозиторий и выполните команду в корне проекта:
 
 ```bash
 docker compose up -d --build
 ```
 
-#### Доступ к API и документации:
-* **Главная страница API:** [http://localhost:8000](http://localhost:8000)
-* **Интерактивная документация (Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)  
-* **Альтернативная документация (ReDoc):** [http://localhost:8000/redoc](http://localhost:8000/redoc)
-* **Проверка здоровья сервиса (Healthcheck):** [http://localhost:8000/health](http://localhost:8000/health)
+Docker автоматически соберет и запустит **все 3 сервиса** в единой изолированной сети с поддержкой **hot-reload** (автообновление кода при сохранении файлов):
+
+1. **PostgreSQL** — порт `5432`
+2. **FastAPI Backend** — порт `8000`
+3. **React Frontend** — порт `5173`
+
+## Ссылки на локальные сервисы
+
+* **Клиентский интерфейс (Frontend):** [http://localhost:5173](http://localhost:5173)
+* **Интерактивная документация API (Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)
+* **Альтернативная документация API (ReDoc):** [http://localhost:8000/redoc](http://localhost:8000/redoc)
+* **Проверка статуса сервера (Healthcheck):** [http://localhost:8000/health](http://localhost:8000/health)
+
+### Управление проектом
+
+* **Проверить статус контейнеров:** `docker compose ps`
+* **Просмотр логов бэкенда в реальном времени:** `docker compose logs -f backend`
+* **Остановить проект:** `docker compose down`
+
+## Регламент работы команды (GitFlow)
+
+В проекте используется модель ветвления **GitFlow**:
+
+* `main` — стабильные релизные версии (прямой пуш заблокирован).
+* `develop` — основная рабочая ветка текущего спринта.
+
+### Цикл выполнения задачи
+
+1. Забрать свежие обновления: `git checkout develop && git pull origin develop`
+2. Создать ветку под задачу: `git checkout -b feature/TL-XX-название`
+3. Зафиксировать изменения коммитом по стандарту **Conventional Commits**:
+   * `feat:` — новая функциональность
+   * `fix:` — исправление ошибки
+   * `docs:` — документация
+   * `style:` — верстка и стили без изменения логики
+   * `chore:` — рутинные настройки, обновление зависимостей
+   * `ci:` — изменения в сценариях GitHub Actions
+4. Отправить ветку на GitHub: `git push -u origin feature/TL-XX-название`
+5. Создать **Pull Request** в ветку `develop` на сайте GitHub.

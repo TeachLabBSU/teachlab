@@ -1,17 +1,27 @@
-# Python
+# Python Caches & Virtual Environments
 __pycache__/
 *.py[cod]
+*$py.class
 .venv/
 .teach_lab_venv/
 venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Environment Variables & Secrets
+.env
 *.env
+!.env.example
 
 # Node & Frontend
 node_modules/
 dist/
 build/
+.npm/
 
-# System
+# IDE & System Files
 .DS_Store
 .vscode/
 .idea/
+*.swp
