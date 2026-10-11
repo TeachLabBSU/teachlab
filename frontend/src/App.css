@@ -4,6 +4,8 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 body {
@@ -15,11 +17,22 @@ body {
 
 .auth-card {
   background: #1e293b;
-  padding: 35px;
+  padding: 32px;
   border-radius: 16px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
+  border: 1px solid #334155;
+  box-sizing: border-box;
+}
+
+.dashboard-card {
+  background: #1e293b;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 640px;
   border: 1px solid #334155;
   box-sizing: border-box;
 }
@@ -120,42 +133,212 @@ body {
   text-align: left;
 }
 
-.user-profile {
-  background: #0f172a;
-  padding: 15px;
+.success-banner {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid #10b981;
+  padding: 10px;
   border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 15px;
   text-align: left;
-  margin-bottom: 20px;
-  border: 1px solid #334155;
 }
 
-.user-profile p {
-  margin: 8px 0;
+.user-profile {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: left;
+  margin-bottom: 24px;
+  border: 1px solid #334155;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.user-profile-info p {
+  margin: 4px 0;
   font-size: 14px;
 }
 
 .badge {
   padding: 2px 8px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.badge.tutor { background: #2563eb; color: white; }
-.badge.student { background: #059669; color: white; }
+.badge.tutor { background: #3b82f6; color: white; }
+.badge.student { background: #10b981; color: white; }
 
 .btn-logout {
-  width: 100%;
-  padding: 10px;
+  padding: 8px 14px;
   background: transparent;
   border: 1px solid #ef4444;
   color: #ef4444;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 13px;
   transition: all 0.2s;
 }
 
 .btn-logout:hover {
   background: #ef4444;
   color: white;
+}
+
+/* Секция классов */
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 14px 0;
+  text-align: left;
+}
+
+.section-title h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #f1f5f9;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+.input-row input:focus {
+  border-color: #6366f1;
+}
+
+.input-row button {
+  padding: 10px 16px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.input-row button:hover {
+  background: #4f46e5;
+}
+
+.classes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.class-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.2s;
+}
+
+.class-card:hover {
+  border-color: #6366f1;
+}
+
+.class-info h4 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  color: #f8fafc;
+}
+
+.class-info p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.code-tag {
+  background: #312e81;
+  color: #a5b4fc;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: 1px solid #4338ca;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.code-tag:hover {
+  background: #4338ca;
+  color: #ffffff;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-small-danger {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-small-danger:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-small-secondary {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid #64748b;
+  color: #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-small-secondary:hover {
+  background: #334155;
+}
+
+.empty-state {
+  padding: 24px;
+  color: #64748b;
+  font-size: 14px;
+  background: #0f172a;
+  border-radius: 8px;
+  border: 1px dashed #334155;
 }

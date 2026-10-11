@@ -1,113 +1,131 @@
 # TeachLab
 
-> **TeachLab** — веб-платформа для комплексной автоматизации работы репетиторов, преподавателей и образовательных центров. Сервис объединяет управление виртуальными учебными классами, личный банк задач с поддержкой математических формул LaTeX, генерацию контрольных вариантов и автоматическую проверку решений учеников в режиме реального времени.
+TeachLab — веб-платформа для комплексной автоматизации работы преподавателей, репетиторов и образовательных центров. Сервис объединяет управление классами, генерацию инвайт-кодов для подключения учеников, банк задач с формулами LaTeX, автоматическую генерацию тестов и проверку решений.
 
 Проект разрабатывается в рамках курса «Технологии программирования» (ФПМИ БГУ, 2026).
 
-## Команда проекта (God Bless AI, Группа 4)
+---
 
-* **Дикан Данила** — Team Lead, DevOps-инженер, Backend-разработчик
-* **Попов Данила** — Backend-разработчик, Technical Writer
-* **Резун Юлия** — UI/UX дизайнер, Frontend-разработчик
-* **Бабаева Полина** — Frontend-разработчик, QA-инженер
+## Команда проекта
 
-## Стек используемых технологий
+| Участник | Роль |
+| :--- | :--- |
+| **Дикан Данила** | Team Lead, Backend & DevOps |
+| **Попов Данила** | Backend Developer |
+| **Резун Юлия** | UI/UX Designer |
+| **Бабаева Полина** | Frontend Developer, QA |
 
-* **Backend:** Python 3.11+, FastAPI (асинхронный REST API), Uvicorn, SQLAlchemy 2.0 (драйвер `psycopg v3`), Pydantic v2
-* **Database:** PostgreSQL 15 (реляционная СУБД с поддержкой `JSONB`)
-* **Frontend:** TypeScript, React 18 (Vite SPA), Tailwind CSS, KaTeX (рендеринг LaTeX-формул)
-* **Безопасность:** Хэширование паролей bcrypt с солью (salt), авторизация на базе JWT-токенов
-* **Инфраструктура:** Docker, Docker Compose (мультиконтейнерная оркестрация)
-* **CI/CD:** GitHub Actions (автоматический линтинг Flake8 при Pull Request)
-* **Управление проектом:** Jira (Scrum), Figma
+---
 
-## Структура монорепозитория
+## Стек технологий
+
+- **Backend:** Python 3.11+, FastAPI, SQLAlchemy 2.0, Pydantic v2, Uvicorn, Alembic
+- **Database:** PostgreSQL 15 (JSONB), psycopg v3
+- **Frontend:** TypeScript, React 18, Vite, CSS3
+- **Безопасность:** Хэширование bcrypt с солью, авторизация JWT (OAuth2 Bearer, RBAC)
+- **Тестирование и линтинг:** Pytest (in-memory SQLite), Flake8 (PEP 8)
+- **Контейнеризация:** Docker, Docker Compose
+
+---
+
+## Архитектура и диаграммы
+
+- **[ER-диаграмма базы данных](backend/docs/images/er_diagram.svg)** — структура таблиц и связей PostgreSQL:
+  
+  ![ER-диаграмма](backend/docs/images/er_diagram.svg)
+
+- **[UML Use Case диаграмма](backend/docs/images/dm_1.png)** — сценарии взаимодействия преподавателей и учеников:
+  
+  ![UML Use Case](backend/docs/images/dm_1.png)
+
+---
+
+## Структура репозитория
 
 ```text
 teachlab/
-├── .github/workflows/       # Сценарии авто-проверки кода (CI/CD)
-├── backend/                 # Серверная часть (FastAPI REST API)
+├── .github/workflows/       # CI-пайплайн проверки кода (Flake8)
+├── backend/                 # Backend сервис на FastAPI
+│   ├── alembic/             # Миграции структуры базы данных
 │   ├── app/
-│   │   ├── core/            # Настройки, подключение к БД, безопасность
-│   │   ├── models/          # Таблицы базы данных (SQLAlchemy)
-│   │   ├── schemas/         # Схемы валидации входящих/исходящих данных (Pydantic)
-│   │   ├── routers/         # Эндпоинты API (auth.py, users.py, classrooms.py)
-│   │   └── main.py          # Главная точка входа приложения
-│   ├── docs/                # Архитектурная документация и диаграммы
-│   │   ├── auth.md          # Обоснование JWT и безопасности паролей
-│   │   └── images/          # UML Use Case и ER диаграммы
-│   ├── requirements.txt     # Зависимости Python
-│   ├── Dockerfile           # Сборка контейнера бэкенда
-│   └── README.md            # Спецификация Backend и JSON API
-├── frontend/                # Клиентская часть (React SPA)
-│   ├── src/                 # Исходный код интерфейса и компонентов
-│   ├── Dockerfile           # Сборка контейнера фронтенда
-│   └── README.md            # Документация Frontend и ссылки на Figma
-├── docker-compose.yml       # Единый запуск PostgreSQL, Backend и Frontend
-└── README.md                # Общая документация проекта
+│   │   ├── core/            # Конфигурация БД, логгер, JWT и безопасность
+│   │   ├── models/          # 10 моделей данных SQLAlchemy 2.0
+│   │   ├── schemas/         # Валидация запросов и ответов Pydantic
+│   │   ├── routers/         # Эндпоинты API (auth, users, classrooms)
+│   │   └── main.py          # Точка входа приложения
+│   ├── docs/                # Документация по безопасности и диаграммы
+│   │   └── images/          # Диаграммы (ER-диаграмма, Use Case)
+│   ├── tests/               # Модульные и интеграционные тесты
+│   ├── requirements.txt     # Python-зависимости
+│   └── README.md            # Документация Backend
+├── frontend/                # Frontend приложение React + Vite
+│   ├── src/                 # Компоненты интерфейса, стили, логика API
+│   ├── package.json         # Зависимости и скрипты сборки
+│   └── README.md            # Документация Frontend
+├── docker-compose.yml       # Сборка и запуск всех сервисов
+├── .flake8                  # Конфигурация линтера
+└── README.md                # Главное описание проекта
 ```
 
-## Проектная документация и спецификации
+---
 
-Для подробного ознакомления с архитектурой перейдите в соответствующие разделы:
+## Запуск проекта
 
-* **[Спецификация REST API и схема базы данных](/backend/README.md)** — полное описание JSON-запросов, ролей и ER-модели.
-* **[Документация клиентской части и прототипы](frontend/README.md)** — описание интерфейса, ссылки на макеты в Figma.
-* **[Архитектура безопасности и авторизации](backend/docs/auth.md)** — детализация работы JWT, хэширования и соли (Bcrypt).
-* **[UML Use Case диаграмма](backend/docs/images/use_case.svg)** — сценарии использования системы.
-* **[ER-диаграмма базы данных](/backend/docs/images/er_diagram.svg)** — структура связей таблиц PostgreSQL.
+### 1. Запуск через Docker Compose (рекомендуется)
 
-## Запуск всего проекта в Docker
-
-### Предварительные требования
-
-1. **Git**
-2. **Docker Desktop** (запущенный в фоновом режиме)
-
-### Запуск системы одной командой
-
-Клонируйте репозиторий и выполните команду в корне проекта:
+Запуск всех сервисов (PostgreSQL, Backend, Frontend) одной командой из корня репозитория:
 
 ```bash
 docker compose up -d --build
 ```
 
-Docker автоматически соберет и запустит **все 3 сервиса** в единой изолированной сети с поддержкой **hot-reload** (автообновление кода при сохранении файлов):
+Сервисы будут доступны по адресам:
+- Frontend интерфейс: http://localhost:5173
+- Документация API (Swagger UI): http://localhost:8000/docs
+- Документация API (ReDoc): http://localhost:8000/redoc
+- Проверка статуса сервиса: http://localhost:8000/health
 
-1. **PostgreSQL** — порт `5432`
-2. **FastAPI Backend** — порт `8000`
-3. **React Frontend** — порт `5173`
+### 2. Локальный запуск без Docker
 
-## Ссылки на локальные сервисы
+#### Backend:
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Для Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
-* **Клиентский интерфейс (Frontend):** [http://localhost:5173](http://localhost:5173)
-* **Интерактивная документация API (Swagger UI):** [http://localhost:8000/docs](http://localhost:8000/docs)
-* **Альтернативная документация API (ReDoc):** [http://localhost:8000/redoc](http://localhost:8000/redoc)
-* **Проверка статуса сервера (Healthcheck):** [http://localhost:8000/health](http://localhost:8000/health)
+# Применение миграций базы данных:
+alembic upgrade head
 
-### Управление проектом
+# Запуск Backend сервера:
+uvicorn app.main:app --reload --port 8000
+```
 
-* **Проверить статус контейнеров:** `docker compose ps`
-* **Просмотр логов бэкенда в реальном времени:** `docker compose logs -f backend`
-* **Остановить проект:** `docker compose down`
+#### Frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-## Регламент работы команды (GitFlow)
+---
 
-В проекте используется модель ветвления **GitFlow**:
+## Тестирование и качество кода
 
-* `main` — стабильные релизные версии (прямой пуш заблокирован).
-* `develop` — основная рабочая ветка текущего спринта.
+В проекте настроен автоматический запуск тестов и проверка стиля кода:
 
-### Цикл выполнения задачи
+```bash
+# Запуск 14 тестов CRUD пользователей и классов:
+pytest -v
 
-1. Забрать свежие обновления: `git checkout develop && git pull origin develop`
-2. Создать ветку под задачу: `git checkout -b feature/TL-XX-название`
-3. Зафиксировать изменения коммитом по стандарту **Conventional Commits**:
-   * `feat:` — новая функциональность
-   * `fix:` — исправление ошибки
-   * `docs:` — документация
-   * `style:` — верстка и стили без изменения логики
-   * `chore:` — рутинные настройки, обновление зависимостей
-   * `ci:` — изменения в сценариях GitHub Actions
-4. Отправить ветку на GitHub: `git push -u origin feature/TL-XX-название`
-5. Создать **Pull Request** в ветку `develop` на сайте GitHub.
+# Проверка соответствия стандарту PEP 8:
+flake8 . --config=.flake8
+```
+
+---
+
+## Дополнительные материалы
+
+- [backend/README.md](backend/README.md) — спецификация эндпоинтов, моделей и миграций базы данных.
+- [frontend/README.md](frontend/README.md) — структура Frontend приложения и руководство по интерфейсу.
+- [backend/docs/AUTH.md](backend/docs/AUTH.md) — описание механизма авторизации и работы с JWT.

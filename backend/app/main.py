@@ -1,35 +1,61 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.database import Base, engine
-from app.routers import auth, users
+from app.core.database import init_db
+from app.core.logger import logger
+from app.routers import auth, classrooms, users
 
 
-# Создаем таблицы в PostgreSQL автоматически при старте сервера
-Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Жизненный цикл приложения: безопасная инициализация БД при старте."""
+    try:
+        init_db()
+        logger.info("Таблицы базы данных успешно проверены/инициализированы")
+    except Exception as e:
+        logger.warning(
+            f"Не удалось подключиться к БД при старте сервера: {e}. "
+            "Убедитесь, что СУБД PostgreSQL запущена, либо выполните миграции Alembic."
+        )
+    yield
+
 
 app = FastAPI(
     title="TeachLab API",
-    description="Платформа для автоматизации репетиторства и генерации контрольных работ",
-    version="0.1.0"
+    description=(
+        "Платформа для комплексной автоматизации репетиторства, "
+        "управления учебными классами и генерации контрольных работ."
+    ),
+    version="0.3.0",
+    lifespan=lifespan,
 )
 
-# Включаем CORS (чтобы фронтенд на React мог свободно делать запросы к бэкенду)
+# Включаем CORS для свободного взаимодействия с React SPA
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # В разработке разрешаем любые запросы
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Подключение маршрутов API
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
+app.include_router(classrooms.router, prefix="/api/v1")
 
-@app.get("/")
+
+@app.get("/", tags=["Служебные"])
 def root():
-    return {"project": "TeachLab", "status": "running"}
+    return {
+        "project": "TeachLab API",
+        "sprint": "Sprint 3",
+        "status": "running",
+        "docs": "/docs",
+    }
 
-@app.get("/health")
+
+@app.get("/health", tags=["Служебные"])
 def health_check():
     return {"status": "ok"}

@@ -30,7 +30,6 @@ jobs:
 
       # Шаг 4: Запустить проверку кода
       - name: Run Flake8 linter
-        # Проверяем синтаксические ошибки (E9, F63, F7, F82)
-        # Если найдет хоть одну критическую ошибку — сборка упадет с ошибкой
+        # Проверяем синтаксические ошибки (E9, F63, F7, F82) с учетом .flake8
         run: |  
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --config=.flake8 --count --select=E9,F63,F7,F82 --show-source --statistics
